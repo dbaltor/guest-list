@@ -1,0 +1,56 @@
+-- create
+
+CREATE TABLE GUEST_TABLE (
+  id INTEGER PRIMARY KEY,
+  number INTEGER NOT NULL,
+  capacity INTEGER NOT NULL
+);
+
+CREATE TABLE RESERVATION (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  table_number INTEGER NOT NULL,
+  accompanying_guests INTEGER NOT NULL
+);
+
+CREATE TABLE ARRIVED (
+  id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  accompanying_guests INTEGER NOT NULL
+);
+
+-- populate
+
+INSERT INTO GUEST_TABLE VALUES (0003, 0003, 10);
+INSERT INTO GUEST_TABLE VALUES (0001, 0001, 10);
+INSERT INTO GUEST_TABLE VALUES (0002, 0002, 10);
+
+INSERT INTO RESERVATION VALUES (0001, 'guest 1', 0001, 8);
+INSERT INTO RESERVATION VALUES (0002, 'guest 2', 0002, 9);
+INSERT INTO RESERVATION VALUES (0003, 'guest 3', 0003, 10);
+
+INSERT INTO ARRIVED VALUES (0001, 'guest 1', 5);
+INSERT INTO ARRIVED VALUES (0002, 'guest 3', 3);
+
+-- query
+
+SELECT * FROM GUEST_TABLE;
+SELECT * FROM RESERVATION;
+SELECT * FROM ARRIVED;
+
+SELECT SUM(t.capacity - COALESCE(a.accompanying_guests,0))
+FROM GUEST_TABLE t
+LEFT JOIN RESERVATION r ON t.number = r.table_number
+LEFT JOIN ARRIVED a ON r.name = a.name
+
+
+------------------
+mysql -u user -ppassword -h 127.0.0.1 database
+
+drop table arrived_guest_db;
+drop table flyway_schema_history;
+drop table reservation_db;
+drop table table_db;
+show tables;
+
+\q
